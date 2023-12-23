@@ -171,6 +171,9 @@
 
 
     let run50Points = 0;
+    if (run50Ref.value === "" || isNaN(run50Ref.value)){
+        VCPoints = 0;
+    }
 
     if (run50Ref.value <= 7.5) {
         run50Points = 20.0;

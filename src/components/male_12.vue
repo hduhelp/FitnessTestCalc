@@ -1,6 +1,7 @@
 <script setup>
     import {ref} from "vue"
     import my_input from "./my_input.vue"
+    import text1000 from "./text1000.vue"
     let heightRef = ref("");
     let weightRef = ref("");
     let vcRef = ref("");
@@ -15,7 +16,13 @@
     const handleInput=()=>{
     let BMI=Number(weightRef.value)/(Number((heightRef.value)/100)**2)
     BMI=BMI.toFixed(3)
-    let BMIPoints=0
+    let BMIPoints = 0.0;
+    if (heightRef.value === "" || weightRef.value === ""){
+        BMIPoints = 0.0;
+    }
+    if (isNaN(heightRef.value) || isNaN(weightRef.value)){
+        BMIPoints = 0.0;
+    }
     if (BMI>=28.0){
         BMIPoints=9.0
     }else if(BMI>=24.0){
@@ -27,7 +34,9 @@
     }
 
     let VCPoints = 0;
-
+    if (vcRef.value === "" || isNaN(vcRef.value)){
+        VCPoints = 0.0;
+    }
     if (vcRef.value >= 5040) {
         VCPoints = 15.0;
     } else if (vcRef.value >= 4920 ) {
@@ -76,7 +85,7 @@
 
 
     let sarPoints = 0;
-    if (sarRef.value === ""){
+    if (sarRef.value === "" || isNaN(sarRef.value)){
         sarPoints = 0;
     }
 
@@ -127,6 +136,9 @@
 
 
     let jumpPoints = 0;
+    if (jumpRef === "" || isNaN(jumpRef === "")){
+        jumpPoints = 0;
+    }
 
     if (jumpRef.value >= 273) {
         jumpPoints = 10;
@@ -174,7 +186,7 @@
 
 
     let run50Points = 0;
-    if (run50Ref.value === ""){
+    if (run50Ref.value === "" || run50Ref.value === ""){
         run50Points = 0
     }
 
@@ -225,8 +237,11 @@
 
     let run1000Points = 0;
     let run1000Ref = Number(run1000Min.value) * 60 + Number(run1000Sec.value);
-    if (run1000Sec.value === ""){
-        run1000Points = 0
+    if (run1000Sec.value === "" || run1000Min.value === ""){
+        run1000Points = 0;
+    }
+    if(isNaN(run1000Sec.value)||isNaN(run1000Min)){
+        run1000Points = 0;
     }
 
     if (run1000Ref <= 162) {
@@ -296,6 +311,9 @@
 
 
     let pullUpPoints = 0;
+    if (pullUpRef.value === ""||pullUpRef.value === ""){
+        pullUpPoints = 0;
+    }
     if (pullUpRef.value >= 29) {
         pullUpPoints = 20.0;
     } else if (pullUpRef.value == 28) {
@@ -437,14 +455,30 @@
         @blur="handleInput"
         mySrc="../assets/run50.jpg"
         />
+        <text1000
+        label="1000米(min)"
+        placeholder="分"
+        v-model:min="run1000Min"
+        v-model:sec="run1000Sec"
+        @input="handleInput"
+        @blur="handleInput"
+        mySrc="../assets/run800_1000.jpg"
+        /> 
         <my_input
+        label="引体向上(次)"
+        placeholder="请输入引体向上次数"
+        v-model="pullUpRef"
+        @input="handleInput"
+        @blur="handleInput"
+        />
+        <!-- <my_input
         label="1000米(min)"
         placeholder="分"
         v-model="run1000Min"
         @input="handleInput"
         @blur="handleInput"
         mySrc="../assets/run800_1000.jpg"
-        />
+        /> 
         <my_input
         label="1000米(s)"
         placeholder="秒"
@@ -452,15 +486,7 @@
         @input="handleInput"
         @blur="handleInput"
         mySrc="../assets/run800_1000.jpg"
-        />
-        <my_input
-        label="引体向上(次)"
-        placeholder="请输入引体向上次数"
-        v-model="pullUpRef"
-        @input="handleInput"
-        @blur="handleInput"
-        mySrc="../assets/pu_su.jpg"
-        />
+        /> -->
 </template>
 <style>
     .points{
@@ -472,16 +498,9 @@
 
 <!-- 目前的问题如下：
 最新的都在male_12里，其他三个以mael_12为主
-1，不知道为什么总分117，一直差三分
-————————————————————————————————————
-2，一但输入身高就跳67分，因为某些成绩低于某个值从而直接最高分
-解决方案：
-    1，世界纪录为底线，还低就弹一个alert（能破世界纪录的就不在这担心自己的体测成绩了）（搞怪但有用）
-    2，空字符串为0分（我好像写错了，没成功）
-    3，两种都用（好像真的行）
-—————————————————————————————————————— 
-3，现在输入秒数才能出现1000米的正确成绩，不然是0分，但是理论上两种都可以，也是改了模态框才出现的，不知道为啥
-4，重置按钮完全不可用
-5，-->
+重置按钮
+分数提前显示
+
+-->
 
 
